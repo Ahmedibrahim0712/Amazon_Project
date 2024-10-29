@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        img {
+            width: 100px; /* Adjust logo size */
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding in width */
+        }
+        button {
+            background-color: #f90;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #e68a00;
+        }
+        .toggle {
+            margin-top: 15px;
+        }
+        .toggle a {
+            color: #0066c0;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="authContainer">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon Logo">
+    <h2 id="formTitle">Login</h2>
+    <form id="authForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+    <div class="toggle">
+        <p>New here? <a href="#" id="toggleToSignUp">Create an account</a></p>
+    </div>
+</div>
+
+<script>
+    const formTitle = document.getElementById('formTitle');
+    const authForm = document.getElementById('authForm');
+    const toggleToSignUp = document.getElementById('toggleToSignUp');
+
+    let isLogin = true;
+
+    toggleToSignUp.addEventListener('click', (event) => {
+        event.preventDefault();
+        isLogin = !isLogin;
+
+        if (isLogin) {
+            formTitle.innerText = 'Login';
+            authForm.innerHTML = `
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            `;
+            toggleToSignUp.innerText = 'Create an account';
+        } else {
+            formTitle.innerText = 'Sign Up';
+            authForm.innerHTML = `
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Sign Up</button>
+            `;
+            toggleToSignUp.innerText = 'Already have an account? Login';
+        }
+    });
+
+    authForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const email = isLogin ? null : document.getElementById('email').value;
+
+        if (isLogin) {
+            // Simulating a login
+            const storedUser = JSON.parse(localStorage.getItem(username));
+            if (storedUser && storedUser.password === password) {
+                alert('Logged in successfully!');
+                window.location.href = 'amazon.html'; // Redirect to another page
+            } else {
+                alert('Invalid username or password.');
+            }
+        } else {
+            // Signup logic
+            const newUser = {
+                username: username,
+                email: email,
+                password: password
+            };
+            localStorage.setItem(username, JSON.stringify(newUser));
+            alert('Account created successfully!');
+            window.location.href = 'login.html'; // Redirect back to login page
+        }
+    });
+</script>
+
+</body>
+</html>
